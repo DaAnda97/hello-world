@@ -1,0 +1,35 @@
+version: '3.9'
+services:
+  h1:
+    image: hello:0.1.0
+    container_name: h1
+    ports:
+      - '8080:8080'
+    environment:
+      PORT: 8080
+    healthcheck:
+      test: "curl --fail --silent localhost:8080/actuator/health | grep UP || exit 1"
+      interval: 5s
+      timeout: 5s
+      retries: 30
+    networks:
+      - internal
+
+  h2:
+    image: hello:0.1.0
+    container_name: h2
+    ports:
+      - '8081:8080'
+    environment:
+      PORT: 8080
+      HELLO_MESSAGE: "hello world again"
+    healthcheck:
+      test: "curl --fail --silent localhost:8080/actuator/health | grep UP || exit 1"
+      interval: 5s
+      timeout: 5s
+      retries: 30
+    networks:
+      - internal
+
+networks:
+  internal:
